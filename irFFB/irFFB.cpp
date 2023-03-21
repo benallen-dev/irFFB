@@ -1402,6 +1402,22 @@ HWND checkbox(HWND parent, wchar_t *name, int x, int y) {
 
 }
 
+HWND button(HWND parent, wchar_t* name, int x, int y) {
+	return CreateWindowEx(
+		0,
+		L"BUTTON",  // Predefined class; Unicode assumed 
+		name,      // Button text 
+		WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
+		x,         // x position 
+		y,         // y position 
+		96,        // Button width
+		32,        // Button height
+		parent,     // Parent window
+		NULL,      
+		(HINSTANCE)GetWindowLongPtr(parent, GWLP_HINSTANCE),
+		NULL);      // Pointer not needed.
+}
+
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 
     DEV_BROADCAST_DEVICEINTERFACE devFilter;
@@ -1472,10 +1488,18 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     textWnd = CreateWindowEx(
         WS_EX_CLIENTEDGE, L"EDIT", L"",
         WS_VISIBLE | WS_VSCROLL | WS_CHILD | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL,
-        32, 372, 376, 240,
+        32, 372, 376, 200,
         mainWnd, NULL, hInst, NULL
     );
     SendMessage(textWnd, EM_SETLIMITTEXT, WPARAM(256000), 0);
+
+    // Add a manual save/load button
+    settings.setSaveButtonWnd(
+        button(mainWnd, L"Save", 32, 580)
+    );
+    settings.setLoadButtonWnd(
+        button(mainWnd, L"Load", 140, 580)
+    );
 
     ShowWindow(mainWnd, SW_HIDE);
     UpdateWindow(mainWnd);
@@ -1532,6 +1556,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                     }
                     else if (HIWORD(wParam) == BN_CLICKED) {
                         bool oldValue = SendMessage((HWND)lParam, BM_GETCHECK, 0, 0) == BST_CHECKED;
+
                         if (wnd == settings.getUse360Wnd())
                             settings.setUse360ForDirect(!oldValue);
                         else if (wnd == settings.getCarSpecificWnd()) {
@@ -1564,6 +1589,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                             else if (debugHnd != INVALID_HANDLE_VALUE) {
                                 CloseHandle(debugHnd);
                                 debugHnd = INVALID_HANDLE_VALUE;
+                            }
+                        }
+						else if (wnd == settings.getSaveButtonWnd()) {
+							if (settings.getUseCarSpecific() && car[0] != 0) {
+								settings.writeSettingsForCar(car);
+							}
+							else {
+								settings.writeGenericSettings();
+							}
+						}
+                        else if (wnd == settings.getLoadButtonWnd()) {
+                            if (settings.getUseCarSpecific() && car[0] != 0) {
+                                settings.readSettingsForCar(car);
+                            }
+                            else {
+                                settings.readGenericSettings();
                             }
                         }
                     }

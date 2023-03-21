@@ -111,6 +111,8 @@ void Settings::setCarSpecificWnd(HWND wnd) { carSpecificWnd = wnd; }
 void Settings::setRunOnStartupWnd(HWND wnd) { runOnStartupWnd = wnd; }
 void Settings::setStartMinimisedWnd(HWND wnd) { startMinimisedWnd = wnd; }
 void Settings::setDebugWnd(HWND wnd) { debugWnd = wnd; }
+void Settings::setSaveButtonWnd(HWND wnd) { saveButtonWnd = wnd; }
+void Settings::setLoadButtonWnd(HWND wnd) { loadButtonWnd = wnd; }
 
 void Settings::clearFfbDevices() {
     memset(ffdevices, 0, sizeof(ffdevices));
