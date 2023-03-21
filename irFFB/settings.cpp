@@ -446,8 +446,7 @@ void Settings::writeGenericSettings() {
 
     HKEY key = getSettingsRegKey();
 
-    if (key == NULL)
-        return;
+    if (key == NULL) return;
 
     setRegSetting(key, L"ffb", ffbType);
     setRegSetting(key, L"bumpsFactor", getBumpsSetting());
@@ -458,7 +457,7 @@ void Settings::writeGenericSettings() {
     setRegSetting(key, L"minForce", getMinForceSetting());
     setRegSetting(key, L"use360ForDirect", use360ForDirect);
     setRegSetting(key, L"understeerFactor", understeerFactor);
-    setRegSetting(key, L"understeerOffset", understeerOffset);
+    setRegSetting(key, L"understeerOffset", getUndersteerOffsetSetting());
 
     RegCloseKey(key);
 
