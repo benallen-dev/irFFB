@@ -124,6 +124,7 @@ understeerCoefs usteerCoefs[] = {
     { "porsche991rsr",      42.0f, 72.0f  },
     { "radical sr8",        40.0f, 100.0f },
     { "radicalsr10",        44.0f, 110.0f },
+    { "raygr22",            44.0f, 100.0f },
     { "rt2000",             25.0f, 86.0f  },
     { "rufrt12r track",     46.0f, 88.0f  },
     { "specracer",          25.0f, 86.0f  },
@@ -1554,43 +1555,43 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                         else if (wnd == settings.getFfbWnd())
                             settings.setFfbType(SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0));
                     }
-                    else if (HIWORD(wParam) == BN_CLICKED) {
-                        bool oldValue = SendMessage((HWND)lParam, BM_GETCHECK, 0, 0) == BST_CHECKED;
+					else if (HIWORD(wParam) == BN_CLICKED) {
+						bool oldValue = SendMessage((HWND)lParam, BM_GETCHECK, 0, 0) == BST_CHECKED;
 
-                        if (wnd == settings.getUse360Wnd())
-                            settings.setUse360ForDirect(!oldValue);
-                        else if (wnd == settings.getCarSpecificWnd()) {
-                            if (!oldValue)
-                                getCarName();
-                            settings.setUseCarSpecific(!oldValue, car);
-                        }
-                        else if (wnd == settings.getReduceWhenParkedWnd())
-                            settings.setReduceWhenParked(!oldValue);
-                        else if (wnd == settings.getRunOnStartupWnd())
-                            settings.setRunOnStartup(!oldValue);
-                        else if (wnd == settings.getStartMinimisedWnd())
-                            settings.setStartMinimised(!oldValue);
-                        else if (wnd == settings.getDebugWnd()) {
-                            settings.setDebug(!oldValue);
-                            if (settings.getDebug()) {
-                                debugHnd = CreateFileW(settings.getLogPath(), GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-                                int chars = SendMessageW(textWnd, WM_GETTEXTLENGTH, 0, 0);
-                                wchar_t *buf = new wchar_t[chars + 1], *str = buf;
-                                SendMessageW(textWnd, WM_GETTEXT, chars + 1, (LPARAM)buf);
-                                wchar_t *end = StrStrW(str, L"\r\n");
-                                while (end) {                                    
-                                    *end = '\0';
-                                    debug(str);
-                                    str = end + 2;
-                                    end = StrStrW(str, L"\r\n");
-                                }
-                                delete[] buf;
-                            }
-                            else if (debugHnd != INVALID_HANDLE_VALUE) {
-                                CloseHandle(debugHnd);
-                                debugHnd = INVALID_HANDLE_VALUE;
-                            }
-                        }
+						if (wnd == settings.getUse360Wnd())
+							settings.setUse360ForDirect(!oldValue);
+						else if (wnd == settings.getCarSpecificWnd()) {
+							if (!oldValue)
+								getCarName();
+							settings.setUseCarSpecific(!oldValue, car);
+						}
+						else if (wnd == settings.getReduceWhenParkedWnd())
+							settings.setReduceWhenParked(!oldValue);
+						else if (wnd == settings.getRunOnStartupWnd())
+							settings.setRunOnStartup(!oldValue);
+						else if (wnd == settings.getStartMinimisedWnd())
+							settings.setStartMinimised(!oldValue);
+						else if (wnd == settings.getDebugWnd()) {
+							settings.setDebug(!oldValue);
+							if (settings.getDebug()) {
+								debugHnd = CreateFileW(settings.getLogPath(), GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+								int chars = SendMessageW(textWnd, WM_GETTEXTLENGTH, 0, 0);
+								wchar_t *buf = new wchar_t[chars + 1], *str = buf;
+								SendMessageW(textWnd, WM_GETTEXT, chars + 1, (LPARAM)buf);
+								wchar_t *end = StrStrW(str, L"\r\n");
+								while (end) {
+									*end = '\0';
+									debug(str);
+									str = end + 2;
+									end = StrStrW(str, L"\r\n");
+								}
+								delete[] buf;
+							}
+							else if (debugHnd != INVALID_HANDLE_VALUE) {
+								CloseHandle(debugHnd);
+								debugHnd = INVALID_HANDLE_VALUE;
+							}
+						}
 						else if (wnd == settings.getSaveButtonWnd()) {
 							if (settings.getUseCarSpecific() && car[0] != 0) {
 								settings.writeSettingsForCar(car);
@@ -1607,7 +1608,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                                 settings.readGenericSettings();
                             }
                         }
-                    }
+					}
                     return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
