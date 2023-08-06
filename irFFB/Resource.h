@@ -19,6 +19,9 @@
 #define ID_SETTINGS_TRACTIONLOSS        32779
 #define IDC_STATIC                      -1
 #define IDC_SYSLINK1					1001
+#define IDC_SYSLINK2					1002
+#define IDC_SYSLINK3					1003
+#define IDC_SYSLINK4					1004
 
 // Next default values for new objects
 // 

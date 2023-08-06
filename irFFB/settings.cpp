@@ -111,6 +111,8 @@ void Settings::setCarSpecificWnd(HWND wnd) { carSpecificWnd = wnd; }
 void Settings::setRunOnStartupWnd(HWND wnd) { runOnStartupWnd = wnd; }
 void Settings::setStartMinimisedWnd(HWND wnd) { startMinimisedWnd = wnd; }
 void Settings::setDebugWnd(HWND wnd) { debugWnd = wnd; }
+void Settings::setSaveButtonWnd(HWND wnd) { saveButtonWnd = wnd; }
+void Settings::setLoadButtonWnd(HWND wnd) { loadButtonWnd = wnd; }
 
 void Settings::clearFfbDevices() {
     memset(ffdevices, 0, sizeof(ffdevices));
@@ -444,8 +446,7 @@ void Settings::writeGenericSettings() {
 
     HKEY key = getSettingsRegKey();
 
-    if (key == NULL)
-        return;
+    if (key == NULL) return;
 
     setRegSetting(key, L"ffb", ffbType);
     setRegSetting(key, L"bumpsFactor", getBumpsSetting());
@@ -456,7 +457,7 @@ void Settings::writeGenericSettings() {
     setRegSetting(key, L"minForce", getMinForceSetting());
     setRegSetting(key, L"use360ForDirect", use360ForDirect);
     setRegSetting(key, L"understeerFactor", understeerFactor);
-    setRegSetting(key, L"understeerOffset", understeerOffset);
+    setRegSetting(key, L"understeerOffset", getUndersteerOffsetSetting());
 
     RegCloseKey(key);
 

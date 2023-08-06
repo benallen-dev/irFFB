@@ -48,6 +48,11 @@ class Settings {
         void setDebugWnd(HWND);
         HWND getDebugWnd() { return debugWnd; };
 
+        void setSaveButtonWnd(HWND);
+        HWND getSaveButtonWnd() { return saveButtonWnd; };
+        void setLoadButtonWnd(HWND);
+        HWND getLoadButtonWnd() { return loadButtonWnd; };
+
         void clearFfbDevices();
         void addFfbDevice(GUID dev, const wchar_t *);
         void setFfbDevice(int);
@@ -102,6 +107,7 @@ class Settings {
         sWins_t *minWnd, *maxWnd, *bumpsWnd, *dampingWnd, *sopWnd, *sopOffsetWnd, *understeerWnd, *understeerOffsetWnd;
         HWND use360Wnd, carSpecificWnd, reduceWhenParkedWnd;
         HWND runOnStartupWnd, startMinimisedWnd, debugWnd;
+        HWND saveButtonWnd, loadButtonWnd;
         int ffbType, ffdeviceIdx, minForce, maxForce;
         float scaleFactor, bumpsFactor, dampingFactor, sopFactor, sopOffset, understeerFactor, understeerOffset;
         bool use360ForDirect, useCarSpecific, debug;
